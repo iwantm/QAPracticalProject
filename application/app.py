@@ -21,7 +21,35 @@ def random_eu_country():
                  'Poland': 'pol',
                  'Romania': 'rmn',
                  'Netherlands': 'dut',
-                 'Belgium': 'fle'}
+                 'Belgium': 'fle',
+                 'Czech Republic': 'cze',
+                 'Greece': 'gre',
+                 'Portugal': 'por',
+                 'Sweden': 'swe',
+                 'Hungary': 'hun',
+                 'Belarus': 'bel',
+                 'Austria': 'ger',
+                 'Serbia': 'ser',
+                 'Switzerland': 'ger',
+                 'Bulgaria': 'bul',
+                 'Denmark': 'dan',
+                 'Finland': 'fin',
+                 'Slovakia': 'slk',
+                 'Norway': 'nor',
+                 'Ireland': 'iri',
+                 'Croatia': 'cro',
+                 'Moldova': 'rmn',
+                 'Bosnia and Herzegovina': 'bos',
+                 'Albania': 'alb',
+                 'Lithuania': 'lth',
+                 'North Macedonia': 'mac',
+                 'Slovenia': 'sln',
+                 'Latvia': 'lat',
+                 'Estonia': 'est',
+                 'Malta': 'mal',
+                 'Iceland': 'ice',
+                 'Andorra': 'cat'
+                 }
     country = choice(list(countries.keys()))
     country_name = country
     country_langauge = countries[country_name]
