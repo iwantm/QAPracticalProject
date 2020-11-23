@@ -1,9 +1,8 @@
 from service4.app import app
 from flask_testing import TestCase
 from unittest.mock import patch
-from unittest.mock import patch
 import json
-from flask import url_for, request
+from flask import url_for
 
 
 class TestBase(TestCase):
@@ -11,7 +10,7 @@ class TestBase(TestCase):
         return app
 
 
-class TestService2(TestBase):
+class TestService4(TestBase):
     def test_output(self):
         with patch('requests.get') as g:
             g.return_value.json.return_value = {
