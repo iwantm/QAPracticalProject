@@ -22,14 +22,3 @@ The requirements the project had to meet were:
 ### My Approach
 To meet the application requirements I decided to create an application that will randomly generate people. When a button is pressed service 2 will generate a country of birth and service 3 will generate the gender of the person, this will then be fed into service 4 which will use the [Behind the name API](https://www.behindthename.com/api/) to generate a name based on the country of birth and gender. This will then sent to service 1 to store the name, gender, a randomly generated age and country of birth in a mysql database. This will then be shown to the user using HTML and a Jinja2 template.
 
-The two implementations of service 2 will be:
-- European Countries
-- Southern American Countries
-
-The two implementations of service 4 will be:
-- Generate one gender
-- Generate more than one
-
-The two implentations of service 4 will be:
-- Generate one person
-- Generate family
