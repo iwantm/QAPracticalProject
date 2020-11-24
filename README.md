@@ -9,6 +9,11 @@
 - [Brief](#brief)
     - [Requirements](#requirements)
     - [My Approach](#my-approach)
+- [CI Pipeline](#ci-pipeline)
+- [Tracking](#tracking)
+- [Version Control](#version-control)
+- [Risk Assessment](#risk-assessment)
+- [Testing](#testing)
     
 
 ## Brief
@@ -28,26 +33,25 @@ The requirements the project had to meet were:
 ### My Approach
 To meet the application requirements I decided to create an application that will randomly generate people. When a button is pressed service 2 will generate a country of birth and service 3 will generate the gender of the person, this will then be fed into service 4 which will use the [Behind the name API](https://www.behindthename.com/api/) to generate a name based on the country of birth and gender. This will then sent to service 1 to store the name, gender, a randomly generated age and country of birth in a mysql database. This will then be shown to the user using HTML and a Jinja2 template.
 
-## Ci Pipeline
+## CI Pipeline
 
 ## Tracking
 I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
-! [Imgur](https://i.imgur.com/eatK3Hp.png)
+![Imgur](https://i.imgur.com/eatK3Hp.png)
 I used epics to keep track of each part of the application, this included each service. testing and containerisation. This allowed me to check the backlog for sub issues of each epic and assign these to sprints, this then allowed me to use a board for the sprint that would keep track of which issues hadn't been started, which were in progress and which were completed for the sprint.
-* IMAGE OF BOARD HERE
+
+IMAGE OF BOARD HERE
+
 Jira also produces charts and reports automatically for the sprints. On a larger project these would be a lot more informative but, as sprints for this project were only a few hours at a time, the reports produced weren't as informative but still produced a visual of how long issues took to complete based on story points(where i remembered to add them). Below is an example of a burnup report
-! [Imgur](https://i.imgur.com/TNEIb6t.png)
+![Imgur](https://i.imgur.com/TNEIb6t.png)
 In the future I think it would be a better idea to integrate Jira with my VCS, to automatically keep track of issues as I found that I became distracted and forgot to move them across.
 
 ## Version Control
 For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
-* IMAGE OF BRANCHES
-
-* IMAGE OF PRs
+![Imgur](https://i.imgur.com/ubj78kC.png)
 ## Risk Assessment
 I made use of a risk assessment for this project, which can be found [here](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing)
-
-
+![Imgur](https://i.imgur.com/3c1eDOA.png)
 ## Testing
 I used pytest to test the application. These tests were designed to check that the output of each service was in the correct format for service 2 and 3. 
 
@@ -56,4 +60,4 @@ For service 4 I used mock testing to mock the return of the API used for name ge
 Service 1 also required mock patch testing with the requests_mock library to patch get requests from both service 2 and 3. I also used unittests built in patch function to patch the return from service 4. The data returned from service 1 is then checked to make sure it contains the information it would have recieved from services 2,3, and 4.
 
 Below is the coverage report, showing the high percentage of coverage achieved, with the only lines not tested being the app runners.
-* ADD PYTEST REPORT HERE
+![Imgur](https://i.imgur.com/Gney1rL.png)
