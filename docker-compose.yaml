@@ -35,7 +35,7 @@ services:
     build: ./service4/.
     image: iwantm/rng:service4
     environment: 
-      API_CODE: iw455756477
+      API_CODE: ${API_CODE}
     deploy:
       replicas: 3
     ports:
