@@ -10,10 +10,10 @@ services:
       published: 5000
       protocol: tcp
     depends_on:
-      service2:
-      service3:
-      service4:
-  service2:
+    - "service2"
+    - "service3"
+    - "service4"
+  serice2:
     build: ./service2/.
     image: service2
     deploy:
@@ -43,5 +43,5 @@ services:
       published: 5003
       protocol: tcp
     depends_on:
-      service2:
-      service3:
+    - "service2"
+    - "service3"
