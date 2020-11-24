@@ -1,0 +1,47 @@
+version: '3.7'
+services: 
+  service1:
+    build: ./service1/.
+    image: iwantm/rng:service1
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5000
+      published: 5000
+      protocol: tcp
+    depends_on:
+    - "service2"
+    - "service3"
+    - "service4"
+  service2:
+    build: ./service2/.
+    image: iwantm/rng:service2
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5001
+      published: 5001
+      protocol: tcp
+  service3:
+    build: ./service3/.
+    image: iwantm/rng:service3
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5002
+      published: 5002
+      protocol: tcp
+  service4:
+    build: ./service4/.
+    image: iwantm/rng:service4
+    environment: 
+      API_CODE: iw455756477
+    deploy:
+      replicas: 3
+    ports:
+    - target: 5003
+      published: 5003
+      protocol: tcp
+    depends_on:
+    - "service2"
+    - "service3"

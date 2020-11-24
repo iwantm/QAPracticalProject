@@ -2,9 +2,9 @@ from flask import Flask, render_template
 import requests
 app = Flask(__name__)
 
-serv2 = "http://localhost:5001"
-serv3 = "http://localhost:5002"
-serv4 = "http://localhost:5003"
+serv2 = "http://service2:5001"
+serv3 = "http://service3:5002"
+serv4 = "http://service4:5003"
 
 
 @app.route('/')
