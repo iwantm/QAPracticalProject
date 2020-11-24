@@ -13,7 +13,7 @@ services:
     - "service2"
     - "service3"
     - "service4"
-  serice2:
+  service2:
     build: ./service2/.
     image: service2
     deploy:
