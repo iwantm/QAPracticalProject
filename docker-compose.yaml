@@ -2,7 +2,7 @@ version: '3.7'
 services: 
   service1:
     build: ./service1/.
-    image: service1
+    image: iwantm/rng:service1
     deploy:
       replicas: 3
     ports:
@@ -15,7 +15,7 @@ services:
     - "service4"
   service2:
     build: ./service2/.
-    image: service2
+    image: iwantm/rng:service2
     deploy:
       replicas: 3
     ports:
@@ -24,7 +24,7 @@ services:
       protocol: tcp
   service3:
     build: ./service3/.
-    image: service3
+    image: iwantm/rng:service3
     deploy:
       replicas: 3
     ports:
@@ -33,7 +33,7 @@ services:
       protocol: tcp
   service4:
     build: ./service4/.
-    image: service4
+    image: iwantm/rng:service4
     environment: 
       API_CODE: iw455756477
     deploy:
