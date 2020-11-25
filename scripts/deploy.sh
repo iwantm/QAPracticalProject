@@ -1,5 +1,5 @@
 #! /bin/bash
-ssh persongen-manager	 << EOF
+ssh google_iwantm_me@persongen-manager	 << EOF
 if [ -d "QAPracticalProject" ]; then
     cd QAPracticalProject
     git pull
