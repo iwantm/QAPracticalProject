@@ -14,6 +14,9 @@ pipeline {
     }
 
     stage('Deploy App') {
+      when {
+        branch 'main'  
+            }
       steps {
         sh './scripts/deploy.sh'
       }
