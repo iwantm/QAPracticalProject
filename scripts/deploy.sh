@@ -4,7 +4,7 @@ if [ -d "QAPracticalProject" ]; then
     cd QAPracticalProject
     git pull
 else
-    git clone https://github.com/iwantm/QAPracticalProject.git
+    git clone git@github.com:iwantm/QAPracticalProject.git
     cd QAPracticalProject/
 fi
 docker-compose pull
