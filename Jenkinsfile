@@ -8,6 +8,9 @@ pipeline {
     }
 
     stage('Build') {
+      when {
+        branch 'main'  
+            }
       steps {
         sh './scripts/build-images.sh'
       }
