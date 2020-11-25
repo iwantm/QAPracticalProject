@@ -8,6 +8,6 @@ else
     cd QAPracticalProject/
 fi
 docker-compose pull
-docker stack deploy --compose-file docker-compose.yaml AnimalApp
+docker stack deploy --compose-file docker-compose.yaml PersonGenerator
 
 EOF
