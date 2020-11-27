@@ -31,7 +31,9 @@ The requirements the project had to meet were:
 - The project must make use of a reverse proxy to make your application accessible to the user.
 
 ### My Approach
-To meet the application requirements I decided to create an application that will randomly generate people. When a button is pressed service 2 will generate a country of birth and service 3 will generate the gender of the person, this will then be fed into service 4 which will use the [Behind the name API](https://www.behindthename.com/api/) to generate a name based on the country of birth and gender. This will then sent to service 1 to store the name, gender, a randomly generated age and country of birth in a mysql database. This will then be shown to the user using HTML and a Jinja2 template.
+To meet the given requirements, I decided to create an application that will randomly generate a person. Service 2 is used to generate the country of birth and corresponding from a dictionary, service 3 is used to to select the gender of the person and service 4 is used to generate the name using the outputs from services 2 and 3. Service 4 is a POST request driven API that takes the language spoken(given by service 2) and the gender(given by service 3). It then uses the [Behind the name API](https://www.behindthename.com/api/) to generate a name based on the language and gender, this is then returned as JSON in the POST response. Service 1 is used to perform the GET requests on services 2 and 3, and the POST request on service 4. It then takes the response from service 4 and uses HTML and Jinja2 templating to return this to the user, as well as the country of birth and gender. Service 1 also provides a button for the user to press to generate a new person.The application uses Docker containerisation to deploy the services across a Docker swarm of 4 machines(3 workers and one manager) all hosted using GCP. This is then deployed using a Jenkins multi-branch pipeline.
+
+ This provides a worker per service, this could be added to at a later date to cope with increased traffic if necessary. Each service has 4 replicas as this allows each machine to run every service of the application, this should allow for machines to be removed or updated with little-to-no downtime.
 
 ## CI Pipeline
 
@@ -50,7 +52,7 @@ In the future I think it would be a better idea to integrate Jira with my VCS, t
 For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
 ![Imgur](https://i.imgur.com/ubj78kC.png)
 ## Risk Assessment
-I made use of a risk assessment for this project, which can be found [here](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing)
+I made use of a risk assessment for this project, which can be found [here](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing). 
 ![Imgur](https://i.imgur.com/3c1eDOA.png)
 ## Testing
 I used pytest to test the application. These tests were designed to check that the output of each service was in the correct format for service 2 and 3. 
