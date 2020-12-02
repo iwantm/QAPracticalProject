@@ -16,6 +16,15 @@ pipeline {
       }
     }
 
+    stage('Setup'){
+      when{
+        branch "main"
+      }
+      steps{
+        sh './scripts/ansible.sh'
+      }
+    }
+
     stage('Deploy App') {
       when {
         branch 'main'  
@@ -25,8 +34,5 @@ pipeline {
       }
     }
 
-  }
-  environment {
-    API_CODE = 'iw455756477'
   }
 }

@@ -1,5 +1,5 @@
 #! /bin/bash
-ssh google_iwantm_me@persongen-manager	 << EOF
+ssh jenkins@persongen-manager -o StrictHostKeyChecking=no	 << EOF
 export API_CODE=iw455756477
 if [ -d "QAPracticalProject" ]; then
     cd QAPracticalProject
