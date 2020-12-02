@@ -7,7 +7,7 @@ pipeline {
       }
       post{
         success {
-          telegramSend env.BRANCH_NAME + ' passed tests'
+          telegramSend 'Hello World'
         }
         failure {
           telegramSend env.BRANCH_NAME + ' failed tests'
