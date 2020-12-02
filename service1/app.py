@@ -1,10 +1,24 @@
 from flask import Flask, render_template
 import requests
+from os import getenv
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
+db = SQLAlchemy(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:' + \
+    '@database:3306/name-db'
+
 
 serv2 = "http://service2:5001"
 serv3 = "http://service3:5002"
 serv4 = "http://service4:5003"
+
+
+class Names(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(20), nullable=False)
+    last_name = db.Column(db.String(20), nullable=False)
+    gender = db.Column(db.String(6), nullable=False)
 
 
 @app.route('/')
@@ -18,6 +32,10 @@ def index():
         gender_name = 'female'
     else:
         gender_name = 'male'
+    new_person = Names(
+        first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
+    db.session.add(new_person)
+    db.session.commit()
     return render_template('index.html', name=name, country=country_name, gender=gender_name)
 
 
