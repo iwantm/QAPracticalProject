@@ -2,7 +2,7 @@
 swarm-manager ansible_host=persongen-manager
 
 [manager:vars]
-ansible_user=iwan
+ansible_user=jenkins
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [worker]
@@ -12,5 +12,5 @@ persongen-worker3
 
 
 [worker:vars]
-ansible_user=iwan
+ansible_user=jenkins
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
