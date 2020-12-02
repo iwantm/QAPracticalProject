@@ -50,7 +50,7 @@ services:
   database:
     image: mysql:5.7
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: name-db
     ports:
     - target: 3306
