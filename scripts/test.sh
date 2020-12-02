@@ -6,7 +6,7 @@ python3 -m venv testing-venv
 . testing-venv/bin/activate
 
 pip3 install -r tests/requirements.txt
-
+export API_CODE=tetststs
 pytest --cov=service1
 pytest --cov=service2
 pytest --cov=service3
