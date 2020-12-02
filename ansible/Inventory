@@ -1,14 +1,14 @@
 [manager]
-swarm-manager ansible_host=instance-2
-
+swarm-manager ansible_host=persongen-manager
 
 [manager:vars]
 ansible_user=iwan
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [worker]
-instance-3
-instance-4
+persongen-worker1	
+persongen-worker2
+persongen-worker3
 
 
 [worker:vars]
