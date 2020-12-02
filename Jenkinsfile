@@ -58,11 +58,11 @@ pipeline {
       post{
         success {
           script{
-            sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + 'successfully%20deployed'
+            sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + '%20successfully%20deployed'
           }
         }
         failure {
-          sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + 'failed%20to%20deploy'
+          sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + '%20failed%20to%20deploy'
         }
       }
     }
