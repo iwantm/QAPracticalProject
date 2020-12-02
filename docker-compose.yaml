@@ -18,7 +18,7 @@ services:
     build: ./service2/.
     image: iwantm/rng:service2
     deploy:
-      replicas: 3
+      replicas: 4
     ports:
     - target: 5001
       published: 5001
@@ -38,7 +38,7 @@ services:
     environment: 
       API_CODE: ${API_CODE}
     deploy:
-      replicas: 3
+      replicas: 4
     ports:
     - target: 5003
       published: 5003
@@ -52,6 +52,8 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: name-db
+    deploy:
+      replicas: 4
     ports:
     - target: 3306
       published: 3306

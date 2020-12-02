@@ -5,6 +5,14 @@ pipeline {
       steps {
         sh './scripts/test.sh'
       }
+      post{
+        success {
+          telegramSend env.BRANCH_NAME + ' passed tests'
+        }
+        failure {
+          telegramSend env.BRANCH_NAME + ' failed tests'
+        }
+      }
     }
 
     stage('Build') {
@@ -35,4 +43,5 @@ pipeline {
     }
 
   }
+  
 }
