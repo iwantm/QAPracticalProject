@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+        TELEGRAM_BOT = credentials('telegram_bot')
+  }
   stages {
     stage('Testing') {
       steps {
@@ -8,7 +11,8 @@ pipeline {
       post{
         success {
           script{
-            sh 'curl https://api.telegram.org/bot'+ credentials("telegram_bot")+'/sendMessage?chat_id=539893428&text=idk'
+            sh 'echo ' + TELEGRAM_BOT
+            // sh 'curl https://api.telegram.org/bot'+ credentials("telegram_bot")+'/sendMessage?chat_id=539893428&text=idk'
           }
         }
         failure {
