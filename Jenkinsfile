@@ -12,7 +12,7 @@ pipeline {
         success {
           script{
             sh 'echo ' + TELEGRAM_BOT
-            sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\&text=' + BRANCH_NAME + '%20passed tests'
+            sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428&text=' + BRANCH_NAME + '%20passed tests'
           }
         }
         failure {
