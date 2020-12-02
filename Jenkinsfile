@@ -7,7 +7,9 @@ pipeline {
       }
       post{
         success {
-            curl 'https://api.telegram.org/bot'+ credentials('telegram_bot')'/sendMessage?chat_id=539893428&text=idk'
+          script{
+            sh 'curl https://api.telegram.org/bot'+ credentials('telegram_bot')'/sendMessage?chat_id=539893428&text=idk'
+          }
         }
         failure {
           telegramSend env.BRANCH_NAME + ' failed tests'
