@@ -13,6 +13,7 @@ services:
     - "service2"
     - "service3"
     - "service4"
+    - "database"
   service2:
     build: ./service2/.
     image: iwantm/rng:service2
@@ -45,3 +46,16 @@ services:
     depends_on:
     - "service2"
     - "service3"
+
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: name-db
+    ports:
+    - target: 3306
+      published: 3306
+    volumes:
+      - type: bind
+        source: ./CreateTables.sql
+        target: /docker-entrypoint-initdb.d/CreateTables.sql
