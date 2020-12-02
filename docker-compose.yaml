@@ -58,4 +58,4 @@ services:
     volumes:
       - type: bind
         source: ./CreateTables.sql
-        target: /docker-entrypoint-initdb.d/
+        target: /docker-entrypoint-initdb.d/CreateTables.sql
