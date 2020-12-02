@@ -10,3 +10,7 @@
   become: true
   roles:
   - worker
+- hosts: nginx
+  become: true
+  roles:
+  - nginx
