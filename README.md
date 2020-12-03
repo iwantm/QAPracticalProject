@@ -74,12 +74,24 @@ The initial pipeline used for the application was a single branch pipeline follo
 ### Second Implementation
 ![Imgur](https://i.imgur.com/6Zn0Duj.png)
 The second implementation of the pipeline was very similar to the first except was made into a multibranch pipeline, using the BlueOcean plugin from Jenkins. The BlueOcean plugin allows for multibranch pipelines using the original Jenkinsfile, with the use of an access token produced by GitHub to allow it to access repositories linked to my GitHub account. The webhook was then updated to trigger on all events, this allowed Jenkins to run the pipeline on every branch of the repository, on each push. As this meant the application was deployed on every push to every branch, there were problems introduced if the updates stopped the application working as intended. To fix this, I added the below code to each stage of the pipeline that should only be ran on the main branch. 
-``` groovy 
+```groovy 
   when {
     branch 'main'  
   }
 ```
-
+### Third Implementation
+![Imgur](https://i.imgur.com/SwY9cLm.png)
+The third implementation of the pipeline fixed the main issue found with the first implementation, with the introduction of a configuration step using Ansible to automatically install and configure the Docker Swarm. The added step removes the need to manually configure each swarm machine, instead just needing to add either the name or private IP to the Ansible inventory.
+```groovy 
+  stage('Setup'){
+      when{
+        branch "main"
+      }
+      steps{
+        sh './scripts/ansible.sh'
+      }
+    }
+```
 
 ## Tracking
 I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
