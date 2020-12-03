@@ -80,7 +80,7 @@ The second implementation of the pipeline was very similar to the first except w
   }
 ```
 ### Third Implementation
-![Imgur](https://i.imgur.com/SwY9cLm.png)
+![Imgur](https://i.imgur.com/JaGoT0t.png)
 The third implementation of the pipeline fixed the main issue found with the first implementation, with the introduction of a configuration step using Ansible to automatically install and configure the Docker Swarm. The added step removes the need to manually configure each swarm machine, instead just needing to add either the name or private IP to the Ansible inventory. The problem with this was a lack of notifications when builds had passed or failed.
 ```groovy 
   stage('Setup'){
