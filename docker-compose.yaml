@@ -4,7 +4,7 @@ services:
     build: ./service1/.
     image: iwantm/rng:service1
     deploy:
-      replicas: 4
+      replicas: 3
     ports:
     - target: 5000
       published: 5000
@@ -18,7 +18,7 @@ services:
     build: ./service2/.
     image: iwantm/rng:service2
     deploy:
-      replicas: 4
+      replicas: 3
     ports:
     - target: 5001
       published: 5001
@@ -38,7 +38,7 @@ services:
     environment: 
       API_CODE: ${API_CODE}
     deploy:
-      replicas: 4
+      replicas: 3
     ports:
     - target: 5003
       published: 5003
