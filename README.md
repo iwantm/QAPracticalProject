@@ -37,6 +37,49 @@ To meet the given requirements, I decided to create an application that will ran
 
 ## CI Pipeline
 
+### Initial Pipeline
+![Imgur](https://i.imgur.com/zBeTDPh.png)
+The initial pipeline used for the application was a single branch pipeline following the diagram above. The pipeline was controlled using Jenkins with 3 stages defined in the Jenkinsfile (Test, Build, Deploy). The test stage would use a Python virtual environment to run Pytest unit tests to test the responses given from the APIs. Once the tests had passed the VM Jenkins is installed on would build the images using ` docker-compose build `and push them to Docker Hub using ` docker-compose push `, I chose DockerHub as it was, in my opinion, more portable than other options as the only configuration needed was for the docker hub user to be logged in or the image to be public. The deploy stage would then ssh into the Docker Swarm manager, pull the project repository from GitHub, pull the images and then use ` docker stack deploy --compose-file docker-compose.yaml` to deploy the application accross the swarm. Deployment was automated through the use of a GitHub webhook that triggered on each push and merge to the main branch. The problem with this initial pipeline was that it required the swarm manager and the workers to be manually set up. Thie meant that the deployment of this pipeline was not portable as it required a lot of configuration to deploy. 
+```groovy 
+  pipeline {
+  agent any
+  stages {
+    stage('Testing') {
+      steps {
+        sh './scripts/test.sh'
+      }
+    }
+
+    stage('Build') {
+      when {
+        branch 'main'
+            }
+      steps {
+        sh './scripts/build-images.sh'
+      }
+    }
+
+    stage('Deploy App') {
+      when {
+        branch 'main'
+            }
+      steps {
+        sh './scripts/deploy.sh'
+      }
+    }
+
+  }
+}
+```
+### Second Implementation
+The second implementation of the pipeline was very similar to the first except was made into a multibranch pipeline, using the BlueOcean plugin from Jenkins. The BlueOcean plugin allows for multibranch pipelines using the original Jenkinsfile, with the use of an access token produced by GitHub to allow it to access repositories linked to my GitHub account. The webhook was then updated to trigger on all events, this allowed Jenkins to run the pipeline on every branch of the repository, on each push. As this meant the application was deployed on every push to every branch, there were problems introduced if the updates stopped the application working as intended. To fix this, I added the below code to each stage of the pipeline that should only be ran on the main branch. 
+'''groovy 
+  when {
+    branch 'main'  
+  }
+'''
+
+
 ## Tracking
 I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
 ![Imgur](https://i.imgur.com/eatK3Hp.png)
