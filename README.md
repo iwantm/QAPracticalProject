@@ -33,10 +33,28 @@ The requirements the project had to meet were:
 ### My Approach
 To meet the given requirements, I decided to create an application that will randomly generate a person. Service 2 is used to generate the country of birth and corresponding from a dictionary, service 3 is used to to select the gender of the person and service 4 is used to generate the name using the outputs from services 2 and 3. Service 4 is a POST request driven API that takes the language spoken(given by service 2) and the gender(given by service 3). It then uses the [Behind the name API](https://www.behindthename.com/api/) to generate a name based on the language and gender, this is then returned as JSON in the POST response. Service 1 is used to perform the GET requests on services 2 and 3, and the POST request on service 4. It then takes the response from service 4 and uses HTML and Jinja2 templating to return this to the user, as well as the country of birth and gender. Service 1 also provides a button for the user to press to generate a new person.The application uses Docker containerisation to deploy the services across a Docker swarm of 4 machines(3 workers and one manager) all hosted using GCP. This is then deployed using a Jenkins multi-branch pipeline.
 
- This provides a worker per service, this could be added to at a later date to cope with increased traffic if necessary. Each service has 4 replicas as this allows each machine to run every service of the application, this should allow for machines to be removed or updated with little-to-no downtime.
+This provides a worker per service, this could be added to at a later date to cope with increased traffic if necessary. Each service has 4 replicas as this allows each machine to run every service of the application, this should allow for machines to be removed or updated with little-to-no downtime.
+
+## Risk Assessment
+I made use of a risk assessment for this project, which can be found [here](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing). 
+![Imgur](https://i.imgur.com/3c1eDOA.png)
+
+## Tracking
+I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
+![Imgur](https://i.imgur.com/eatK3Hp.png)
+I used epics to keep track of each part of the application, this included each service. testing and containerisation. This allowed me to check the backlog for sub issues of each epic and assign these to sprints, this then allowed me to use a board for the sprint that would keep track of which issues hadn't been started, which were in progress and which were completed for the sprint.
+
+IMAGE OF BOARD HERE
+
+Jira also produces charts and reports automatically for the sprints. On a larger project these would be a lot more informative but, as sprints for this project were only a few hours at a time, the reports produced weren't as informative but still produced a visual of how long issues took to complete based on story points(where i remembered to add them). Below is an example of a burnup report
+![Imgur](https://i.imgur.com/TNEIb6t.png)
+In the future I think it would be a better idea to integrate Jira with my VCS, to automatically keep track of issues as I found that I became distracted and forgot to move them across.
+
+## Version Control
+For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
+![Imgur](https://i.imgur.com/ubj78kC.png)
 
 ## CI Pipeline
-
 ### Initial Pipeline
 ![Imgur](https://i.imgur.com/zBeTDPh.png)
 The initial pipeline used for the application was a single branch pipeline following the diagram above. The pipeline was controlled using Jenkins with 3 stages defined in the Jenkinsfile (Test, Build, Deploy). The test stage would use a Python virtual environment to run Pytest unit tests to test the responses given from the APIs. Once the tests had passed the VM Jenkins is installed on would build the images using ` docker-compose build `and push them to Docker Hub using ` docker-compose push `, I chose DockerHub as it was, in my opinion, more portable than other options as the only configuration needed was for the docker hub user to be logged in or the image to be public. The deploy stage would then ssh into the Docker Swarm manager, pull the project repository from GitHub, pull the images and then use ` docker stack deploy --compose-file docker-compose.yaml` to deploy the application accross the swarm. Deployment was automated through the use of a GitHub webhook that triggered on each push and merge to the main branch. The problem with this initial pipeline was that it required the swarm manager and the workers to be manually set up. Thie meant that the deployment of this pipeline was not portable as it required a lot of configuration to deploy. 
@@ -115,24 +133,10 @@ The fourth implementation of the pipeline had the exact same stages as the third
     }
   }
 ```
-## Tracking
-I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
-![Imgur](https://i.imgur.com/eatK3Hp.png)
-I used epics to keep track of each part of the application, this included each service. testing and containerisation. This allowed me to check the backlog for sub issues of each epic and assign these to sprints, this then allowed me to use a board for the sprint that would keep track of which issues hadn't been started, which were in progress and which were completed for the sprint.
 
-IMAGE OF BOARD HERE
-
-Jira also produces charts and reports automatically for the sprints. On a larger project these would be a lot more informative but, as sprints for this project were only a few hours at a time, the reports produced weren't as informative but still produced a visual of how long issues took to complete based on story points(where i remembered to add them). Below is an example of a burnup report
-![Imgur](https://i.imgur.com/TNEIb6t.png)
-In the future I think it would be a better idea to integrate Jira with my VCS, to automatically keep track of issues as I found that I became distracted and forgot to move them across.
-
-## Version Control
-For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
-![Imgur](https://i.imgur.com/ubj78kC.png)
-## Risk Assessment
-I made use of a risk assessment for this project, which can be found [here](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing). 
-![Imgur](https://i.imgur.com/3c1eDOA.png)
-## Testing
+## Pipeline Stages
+These stages are triggered on every push of the main branch. All of the other branches and pull requests, only go through the test stage.
+### Test
 I used pytest to test the application. These tests were designed to check that the output of each service was in the correct format for service 2 and 3. 
 
 For service 4 I used mock testing to mock the return of the API used for name generation and then unit tested the result to check that the results were as expected. 
@@ -141,3 +145,17 @@ Service 1 also required mock patch testing with the requests_mock library to pat
 
 Below is the coverage report, showing the high percentage of coverage achieved, with the only lines not tested being the app runners.
 ![Imgur](https://i.imgur.com/Gney1rL.png)
+
+To run this in the pipeline I created a script that would create a venv and install the dependencies for testing, it would then run pytest on each test file to make sure it passes. Once complete the script deleted the virtual environment.
+
+### Build
+The build step of the pipeline builds the images for Docker. It uses the docker-compose tool to build the images based on the docker-compose.yaml using the command `docker-compose build `. It builds the images based on the Dockerfile for each service and then pushes each image to a repository on DockerHub using the image name provided in the compose file. 
+
+### Setup
+The setup stage of the pipeline uses Ansible to initialise the Docker Swarm, using SSH to access each machine. The roles provided for the swarm are common, worker and manager with the common role installing Docker and docker-compose with the dependencies required. The manager role initialises the swarm and stores the token as a host variable. The worker role uses the join token to join the swarm as a worker. This allows the swarm to be used for the deployment of the application in the next step. 
+
+### Deployment
+The last step of the pipeline that deploys the application to the swarm. This stage of the pipeline uses SSH to connect to the swarm manager and pull the docker images from DockerHub using the compose file. Docker stack is then used to deploy the services across the nodes using the images pulled earlier in the step.
+
+
+
