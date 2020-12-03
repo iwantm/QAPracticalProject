@@ -1,6 +1,6 @@
 #! /bin/bash
 ssh jenkins@persongen-manager -o StrictHostKeyChecking=no	 << EOF
-export API_CODE={env.$API_CODE}
+export API_CODE=$API_CODE
 echo $API_CODE
 if [ -d "QAPracticalProject" ]; then
     cd QAPracticalProject
