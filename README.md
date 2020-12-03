@@ -54,6 +54,16 @@ In the future I think it would be a better idea to integrate Jira with my VCS, t
 For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
 ![Imgur](https://i.imgur.com/ubj78kC.png)
 
+## Architechture
+### ERD
+The database only requires one table as it only stores the information of the names generated.
+![Imgur](https://i.imgur.com/4ZsXN1P.png)
+
+### Infrastrcuture
+The Jenkins pipeline and Ansible were ran on the same machine, as Ansible requires little power and therefore would be less cost effective to run on a seperate VM. The Docker swarm consists of a manager and 3 workers, which are configured by the Jenkins server using Ansible, dependant on role. NGINX was used as a load balancer and was set up using Ansible as well.
+![Imgur](https://i.imgur.com/vY6WYHM.png)
+
+
 ## CI Pipeline
 ### Initial Pipeline
 ![Imgur](https://i.imgur.com/zBeTDPh.png)
@@ -133,6 +143,19 @@ The fourth implementation of the pipeline had the exact same stages as the third
     }
   }
 ```
+![Imgur](https://i.imgur.com/fPwJnw4.png)
+This is an example of the messages sent by the bot.
+
+### Benefits of Pipeline
+The multibranch pipeline allowed for benefits during the latter development of the project. As each branch ran the unit testing of the application, this meant that I was given message notifcations when tests had passed. This also allowed GitHub to tell me ,in the pull request screen ,if a branch can be merged based on if it had passed tests.
+![Imgur](https://i.imgur.com/GhwkmGJ.png)
+This would allow me to choose whether to merge pull requests based on successful tests rather than risking the up time of application.
+### Branch views
+The BlueOcean plugin for Jenkins also much improved the user interface for Jenkins, which made it easier to see which stage the pipeline was in. This meant that accessing the logs produced for builds was much easier and it was all in one place.
+![Imgur](https://i.imgur.com/Y776tZv.png)
+It also showed the stages being skipped for the other branches.
+![Imgur](https://i.imgur.com/Sd7g1tw.png)
+
 
 ## Pipeline Stages
 These stages are triggered on every push of the main branch. All of the other branches and pull requests, only go through the test stage.
