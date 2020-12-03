@@ -6,6 +6,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
+app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 
 
 serv2 = "http://service2:5001"
@@ -13,11 +14,11 @@ serv3 = "http://service3:5002"
 serv4 = "http://service4:5003"
 
 
-# class Names(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     first_name = db.Column(db.String(20), nullable=False)
-#     last_name = db.Column(db.String(20), nullable=False)
-#     gender = db.Column(db.String(6), nullable=False)
+class Names(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(20), nullable=False)
+    last_name = db.Column(db.String(20), nullable=False)
+    gender = db.Column(db.String(6), nullable=False)
 
 
 @app.route('/')
