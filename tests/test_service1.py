@@ -1,4 +1,4 @@
-from service1.app import app, db, Names
+from service1.app import app
 from flask_testing import TestCase
 
 from unittest.mock import patch
@@ -12,17 +12,17 @@ serv3 = "http://service3:5002"
 
 class TestBase(TestCase):
     def create_app(self):
-        app.config.update(
-            SQLALCHEMY_DATABASE_URI="sqlite:///data.db",
-            TESTING=True)
+        # app.config.update(
+        #     SQLALCHEMY_DATABASE_URI="sqlite:///data.db",
+        #     TESTING=True)
         return app
 
-    def setUp(self):
-        db.create_all()
+    # def setUp(self):
+    #     db.create_all()
 
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+    # def tearDown(self):
+    #     db.session.remove()
+    #     db.drop_all()
 
 
 class TestService1(TestBase):
@@ -37,10 +37,10 @@ class TestService1(TestBase):
                 n.return_value.json.return_value = {"first_name": "Iwan",
                                                     "last_name": "Moreton"}
                 response = self.client.get(url_for('index'))
-                people = Names.query.all()
-                person = Names.query.filter_by(first_name='Iwan').first()
-                print(response.data)
-                self.assertIn(person, people)
+                # people = Names.query.all()
+                # person = Names.query.filter_by(first_name='Iwan').first()
+                # print(response.data)
+                # self.assertIn(person, people)
                 self.assert200
                 self.assertIn(b'Iwan', response.data)
                 self.assertIn(b'Moreton', response.data)
