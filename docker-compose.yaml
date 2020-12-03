@@ -52,6 +52,10 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: name-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
     ports:
     - target: 3306
       published: 3306
