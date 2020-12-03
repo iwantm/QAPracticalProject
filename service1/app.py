@@ -5,7 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 db = SQLAlchemy(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@database:3306/name-db'
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 
 
@@ -32,10 +33,10 @@ def index():
         gender_name = 'female'
     else:
         gender_name = 'male'
-    # new_person = Names(
-    #     first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
-    # db.session.add(new_person)
-    # db.session.commit()
+    new_person = Names(
+        first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
+    db.session.add(new_person)
+    db.session.commit()
     return render_template('index.html', name=name, country=country_name, gender=gender_name)
 
 
