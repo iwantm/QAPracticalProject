@@ -1,4 +1,4 @@
-from service1.app import app
+from service1.app import app, db, Names
 from flask_testing import TestCase
 
 from unittest.mock import patch
