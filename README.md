@@ -81,7 +81,7 @@ The second implementation of the pipeline was very similar to the first except w
 ```
 ### Third Implementation
 ![Imgur](https://i.imgur.com/SwY9cLm.png)
-The third implementation of the pipeline fixed the main issue found with the first implementation, with the introduction of a configuration step using Ansible to automatically install and configure the Docker Swarm. The added step removes the need to manually configure each swarm machine, instead just needing to add either the name or private IP to the Ansible inventory.
+The third implementation of the pipeline fixed the main issue found with the first implementation, with the introduction of a configuration step using Ansible to automatically install and configure the Docker Swarm. The added step removes the need to manually configure each swarm machine, instead just needing to add either the name or private IP to the Ansible inventory. The problem with this was a lack of notifications when builds had passed or failed.
 ```groovy 
   stage('Setup'){
       when{
@@ -92,7 +92,29 @@ The third implementation of the pipeline fixed the main issue found with the fir
       }
     }
 ```
-
+### Fourth Implementation
+The fourth implementation of the pipeline had the exact same stages as the third(Test, Build, Setup, Deploy). Although added Telegram notifcations on each stage of the build, with the testing stage sending a message if it had passed or failed, the Build and Setup stages only sending messages on failure, and the deployment stage sending a message if the build had successfully deployed or not. The messages were sent using the Telegram http bot API and curl. The lines below show which lines were added to testing to achieve this, with the format being similar for the other stages:
+```groovy 
+  environment {
+    TELEGRAM_BOT = credentials('telegram_bot')
+  }
+  stages {
+    stage('Testing') {
+      steps {
+          sh './scripts/test.sh'
+      }
+    post{
+      success {
+        script{
+          sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + '%20passed%20tests'
+        }
+      }
+      failure {
+        sh 'curl https://api.telegram.org/bot'+ TELEGRAM_BOT +'/sendMessage?chat_id=539893428\\&text=' + BRANCH_NAME + '%20failed%20tests'
+      }
+    }
+  }
+```
 ## Tracking
 I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
 ![Imgur](https://i.imgur.com/eatK3Hp.png)
