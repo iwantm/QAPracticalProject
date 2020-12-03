@@ -1,6 +1,6 @@
 #! /bin/bash
 sudo apt install python3 python3-pip python3-venv -y
-echo {env.$API_CODE}
+echo ${env.API_CODE}
 python3 -m venv testing-venv
 
 . testing-venv/bin/activate
