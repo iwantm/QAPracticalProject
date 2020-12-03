@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment {
         TELEGRAM_BOT = credentials('telegram_bot')
+        API_CODE = 'iw455756477'
   }
   stages {
     stage('Testing') {
