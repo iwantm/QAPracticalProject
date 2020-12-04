@@ -14,4 +14,3 @@ class TestService3(TestBase):
         response = self.client.get(url_for('random_gender'))
         self.assert200(response)
         self.assertIn(b'gender', response.data)
-        self.assertFalse(True)
