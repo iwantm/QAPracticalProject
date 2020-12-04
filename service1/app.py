@@ -33,7 +33,7 @@ def index():
     country_name = country["country_name"]
     if gender["gender"] == 'f':
         gender_name = 'female'
-    else:
+    elif gender["gender"] == 'm':
         gender_name = 'male'
     try:
         new_person = Names(

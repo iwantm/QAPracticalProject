@@ -22,11 +22,16 @@
   - [Fourth Implementation](#fourth-implementation)
   - [Benefits of Pipeline](#benefits-of-pipeline)
   - [Branch views](#branch-views)
+  - [Logging](#logging)
 - [Pipeline Stages](#pipeline-stages)
   - [Test](#test)
   - [Build](#build)
   - [Setup](#setup)
   - [Deployment](#deployment)
+- [Changes](#changes)
+  - [Service 1](#service-1)
+  - [Risk Assessment](#risk-assessment)
+
 
     
 
@@ -173,6 +178,12 @@ The BlueOcean plugin for Jenkins also much improved the user interface for Jenki
 ![Imgur](https://i.imgur.com/Y776tZv.png)
 It also showed the stages being skipped for the other branches.
 ![Imgur](https://i.imgur.com/Sd7g1tw.png)
+### Logging
+After each step Jenkins produces logs on both successful builds and failed builds. These are accessable using the Jenkins UI and are able to be opened as plain text in a seperate window.
+![Imgur](https://i.imgur.com/DZjBd9n.png)
+
+![Imgur](https://i.imgur.com/3Eu9OZj.png)
+
 
 
 ## Pipeline Stages
@@ -198,5 +209,31 @@ The setup stage of the pipeline uses Ansible to initialise the Docker Swarm, usi
 ### Deployment
 The last step of the pipeline that deploys the application to the swarm. This stage of the pipeline uses SSH to connect to the swarm manager and pull the docker images from DockerHub using the compose file. Docker stack is then used to deploy the services across the nodes using the images pulled earlier in the step.
 
+
+
+## Changes
+### Service 1 
+In intial development of service 1 I was using a if else statement for the gender name on the page.
+```python
+    if gender["gender"] == 'f':
+        gender_name = 'female'
+    else:
+        gender_name = 'male'
+```
+This caused issues as it meant that if the return from service 3 was incorrect it would just default as male.
+I updated this to be more correct by changing it from an else statement to a elif statement, making sure that it was checking correctly.
+```python
+    if gender["gender"] == 'f':
+        gender_name = 'female'
+    elif gender["gender"] == 'm':
+        gender_name = 'male'
+```
+### Risk Assessment
+During development of the application it was found that some errors in the code were not picked up by unit testing. One of these errors was the database connection timing out. In turn I added a section for errors not being picked up by testing to my risk assessment.
+![Imgur](https://i.imgur.com/Sib0cZW.png)
+
+
+## Author
+Iwan Moreton
 
 

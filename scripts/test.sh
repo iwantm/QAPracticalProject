@@ -6,10 +6,10 @@ python3 -m venv testing-venv
 
 pip3 install -r tests/requirements.txt
 export API_CODE=tetststs
-pytest --cov=service1
-pytest --cov=service2
-pytest --cov=service3
-pytest --cov=service4
+pytest --suppress-no-test-exit-code
+
+
+
 
 deactivate
 
