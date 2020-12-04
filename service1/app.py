@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import requests
 from os import getenv
+from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -39,7 +40,7 @@ def index():
             first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
         db.session.add(new_person)
         db.session.commit()
-    except (AttributeError, db.OperationalError):
+    except (AttributeError, exc.SQLAlchemyError):
         new_person = Names(
             first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
         db.session.add(new_person)
