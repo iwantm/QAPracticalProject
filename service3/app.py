@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/')
 def random_gender():
     resp = {"gender": ""}
-    gender = choice('mf')
+    gender = choice('mfff')
     resp["gender"] = gender
     return jsonify(resp)
 
