@@ -3,17 +3,31 @@
 ## Links
 - [Jira Board](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) 
 - [Risk Assessment](https://docs.google.com/spreadsheets/d/1IeuFpi1XlGLEOQXmaGHo8kVIGX8WgU8-X_HEDSg3zGQ/edit?usp=sharing)
-- [Website]()
+- [Website](http://34.105.241.249/)
 
 ## Contents
 - [Brief](#brief)
     - [Requirements](#requirements)
     - [My Approach](#my-approach)
-- [CI Pipeline](#ci-pipeline)
+- [Risk Assessment](#risk-assessment)
 - [Tracking](#tracking)
 - [Version Control](#version-control)
-- [Risk Assessment](#risk-assessment)
-- [Testing](#testing)
+- [Architechture](#architechture)
+    - [ERD](#erd)
+    - [Infrastrcuture](#infrastrcuture)
+- [CI Pipeline](#ci-pipeline)
+    - [Initial Pipeline](#initial-pipeline)
+    - [Second Implementation](#second-implementation)
+    - [Third Implementation](#third-implementation)
+    - [Fourth Implementation](#fourth-implementation)
+    - [Benefits of Pipeline](#benefits-of-pipeline)
+    - [Branch views](#branch-views)
+- [Pipeline Stages](#pipeline-stages)
+    - [Test](#test)
+    - [Build](#build)
+    - [Setup](#setup)
+    - [Deployment](#deployment)
+
     
 
 ## Brief
