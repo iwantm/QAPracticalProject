@@ -29,14 +29,17 @@ class Names(db.Model):
 def index():
     country = requests.get(serv2).json()
     gender = requests.get(serv3).json()
-    time.sleep(1)
-    name = requests.post(serv4, json={"country_language": country["country_language"],
-                                      "gender": gender["gender"]}).json()
-    country_name = country["country_name"]
     if gender["gender"] == 'f':
         gender_name = 'female'
     elif gender["gender"] == 'm':
         gender_name = 'male'
+    try:
+        name = requests.post(serv4, json={"country_language": country["country_language"],
+                                          "gender": gender["gender"]}).json()
+    except:
+        name = requests.post(serv4, json={"country_language": country["country_language"],
+                                          "gender": gender["gender"]}).json()
+    country_name = country["country_name"]
     try:
         new_person = Names(
             first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
