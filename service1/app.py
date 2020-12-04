@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import requests
-from os import getenv
+from os import getenv, wait
+import time
 from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
@@ -28,6 +29,7 @@ class Names(db.Model):
 def index():
     country = requests.get(serv2).json()
     gender = requests.get(serv3).json()
+    time.sleep(1)
     name = requests.post(serv4, json={"country_language": country["country_language"],
                                       "gender": gender["gender"]}).json()
     country_name = country["country_name"]
