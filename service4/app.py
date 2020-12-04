@@ -11,6 +11,8 @@ def random_name():
     code = getenv('API_CODE')
     country = request.get_json()['country_language']
     gender = request.get_json()['gender']
+    if gender == 'm':
+        country = 'grem'
     response = requests.get("https://www.behindthename.com/api/random.json?usage=" +
                             country + "&gender=" + gender + "&key=" + code + "&number=1&randomsurname=yes")
 
