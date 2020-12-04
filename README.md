@@ -81,6 +81,9 @@ For this project I used Git for version control with GitHub as the provider. I m
 As the database only stores the generated names and genders, it only requires one table for persisting data. 
 ![Imgur](https://i.imgur.com/4ZsXN1P.png)
 
+### App Structure
+![Imgur](https://i.imgur.com/UQPopEU.png)
+
 ### Infrastrcuture
 The Jenkins server and Ansible were run on the dame machine, as it means that less configuration is needed, with only the public key from the Jenkins server being needed when creating the other machines. This isn't much of a problem as Ansible doesn't require much power to be used. This also means that it is more cost effective as it doesn't require an extra VM. The swarm consists of a manager and 3 workers, which are configured by Ansible dependant on the role set. NGINX was used as a load balancer and was set up by Ansible as well.
 ![Imgur](https://i.imgur.com/vY6WYHM.png)
