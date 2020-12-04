@@ -42,32 +42,35 @@ I made use of a risk assessment for this project, which can be found [here](http
 ## Tracking
 I used [Jira](https://iwanmoreton.atlassian.net/jira/software/projects/RPG/boards/2) to track the progress of the project.
 ![Imgur](https://i.imgur.com/eatK3Hp.png)
-I used epics to keep track of each part of the application, this included each service. testing and containerisation. This allowed me to check the backlog for sub issues of each epic and assign these to sprints, this then allowed me to use a board for the sprint that would keep track of which issues hadn't been started, which were in progress and which were completed for the sprint.
+I used epics to keep track of each part of the application, this included each service. testing, containerisation and Jenkins. This allowed me to check the backlog for sub issues of each epic and assign these to sprints, this then allowed me to use a board for the sprint that would keep track of which issues hadn't been started, which were in progress and which were completed for the sprint.
 
-IMAGE OF BOARD HERE
+![Imgur](https://i.imgur.com/jNvwR65.png)
 
 Jira also produces charts and reports automatically for the sprints. On a larger project these would be a lot more informative but, as sprints for this project were only a few hours at a time, the reports produced weren't as informative but still produced a visual of how long issues took to complete based on story points(where i remembered to add them). Below is an example of a burnup report
+
 ![Imgur](https://i.imgur.com/TNEIb6t.png)
-In the future I think it would be a better idea to integrate Jira with my VCS, to automatically keep track of issues as I found that I became distracted and forgot to move them across.
+
+In the future I think it would be a better idea to integrate Jira with my VCS, to automatically keep track of issues as I found that I became distracted and forgot to move them across. Jira has good GitHub integration, so this should be easy enough in the future.
 
 ## Version Control
-For this project I used Git as version control with GitHub as the provider. I used a feature-branch system throughout with very few commits to main. This allowed me to keep track of the feature I was focussing on and would have allowed for me to roll back on features if a particular merge broke the application. I also made use of a .gitignore file to make sure that unnecessary files, such as pycache files, were omitted from each commit.
+For this project I used Git for version control with GitHub as the provider. I made use of a feature-branch system, with the only commits to main being merges and hotfixes for smaller issues. This allowed me to focus on features of the application and merge these in as necessary. Once the pipeline was introduced to the project, this also allowed me to see if the changes had passed the unit testing before I merged them to main to be automatically deployed. This allowed for me to roll back the application easily if a merge had caused issues with the application. I also made use of a .gitignore file to make sure that unnecessary files weren't included in the repo.
+
 ![Imgur](https://i.imgur.com/ubj78kC.png)
 
 ## Architechture
 ### ERD
-The database only requires one table as it only stores the information of the names generated.
+As the database only stores the generated names and genders, it only requires one table for persisting data. 
 ![Imgur](https://i.imgur.com/4ZsXN1P.png)
 
 ### Infrastrcuture
-The Jenkins pipeline and Ansible were ran on the same machine, as Ansible requires little power and therefore would be less cost effective to run on a seperate VM. The Docker swarm consists of a manager and 3 workers, which are configured by the Jenkins server using Ansible, dependant on role. NGINX was used as a load balancer and was set up using Ansible as well.
+The Jenkins server and Ansible were run on the dame machine, as it means that less configuration is needed, with only the public key from the Jenkins server being needed when creating the other machines. This isn't much of a problem as Ansible doesn't require much power to be used. This also means that it is more cost effective as it doesn't require an extra VM. The swarm consists of a manager and 3 workers, which are configured by Ansible dependant on the role set. NGINX was used as a load balancer and was set up by Ansible as well.
 ![Imgur](https://i.imgur.com/vY6WYHM.png)
-
 
 ## CI Pipeline
 ### Initial Pipeline
 ![Imgur](https://i.imgur.com/zBeTDPh.png)
-The initial pipeline used for the application was a single branch pipeline following the diagram above. The pipeline was controlled using Jenkins with 3 stages defined in the Jenkinsfile (Test, Build, Deploy). The test stage would use a Python virtual environment to run Pytest unit tests to test the responses given from the APIs. Once the tests had passed the VM Jenkins is installed on would build the images using ` docker-compose build `and push them to Docker Hub using ` docker-compose push `, I chose DockerHub as it was, in my opinion, more portable than other options as the only configuration needed was for the docker hub user to be logged in or the image to be public. The deploy stage would then ssh into the Docker Swarm manager, pull the project repository from GitHub, pull the images and then use ` docker stack deploy --compose-file docker-compose.yaml` to deploy the application accross the swarm. Deployment was automated through the use of a GitHub webhook that triggered on each push and merge to the main branch. The problem with this initial pipeline was that it required the swarm manager and the workers to be manually set up. Thie meant that the deployment of this pipeline was not portable as it required a lot of configuration to deploy. 
+The initial pipeline I used for the application was a single branch pipeline. The pipeline was controlled by Jenkins with 3 stages defined in the Jenkinsfile (Test, Build, Deploy). The test stage used a Python virtual environment to run unit tests on each of the services. Once the tests had finished running the server would then build and push the images to Docker Hub. I chose Docker Hub as I believe it to be more portable than other options available as it doesnt require extra configuration to pull the images and only requires a log in to push the images. The deploy stage would then SSH into the swarm manager, pull the project respository from GitHub, pull the images using the docker-compose file and then deploy the application to the swarm. Deployment was automated through a web hook which was triggered on each push to the main branch. The main problem with this initial pipeline was that it required the swarm manager and workers to be set up manually. This meant that the pipeline was not portable as it required a large amount of configuraion to be deployed across the swarm.
+
 ```groovy 
   pipeline {
   agent any
@@ -101,7 +104,8 @@ The initial pipeline used for the application was a single branch pipeline follo
 ```
 ### Second Implementation
 ![Imgur](https://i.imgur.com/6Zn0Duj.png)
-The second implementation of the pipeline was very similar to the first except was made into a multibranch pipeline, using the BlueOcean plugin from Jenkins. The BlueOcean plugin allows for multibranch pipelines using the original Jenkinsfile, with the use of an access token produced by GitHub to allow it to access repositories linked to my GitHub account. The webhook was then updated to trigger on all events, this allowed Jenkins to run the pipeline on every branch of the repository, on each push. As this meant the application was deployed on every push to every branch, there were problems introduced if the updates stopped the application working as intended. To fix this, I added the below code to each stage of the pipeline that should only be ran on the main branch. 
+
+The second implementation of the pipeline used the same base Jenkinsfile as the first, with few changes. The main difference between this implementation and the first was the introduction of the BlueOcean Jenkins Plugin that allowed for a multibranch pipeline to be set up. The BlueOcean plugin requires a GitHub access token to your account, so that it can check your repositories. It then lets you pick which repository you want to run a CI/CD server for, and searches it for a Jenkinsfile. The last change was to make the webhook trigger on all events, so that BlueOcean knows when a push is made to any branch. The Jenkinsfile had to be updated for the Build and Deploy steps with the below code so that it wasnt building and deploying on all branches, as this would have led to downtime as any errors in any branch would be automatically deployed.
 ```groovy 
   when {
     branch 'main'  
@@ -121,7 +125,7 @@ The third implementation of the pipeline fixed the main issue found with the fir
     }
 ```
 ### Fourth Implementation
-The fourth implementation of the pipeline had the exact same stages as the third(Test, Build, Setup, Deploy). Although added Telegram notifcations on each stage of the build, with the testing stage sending a message if it had passed or failed, the Build and Setup stages only sending messages on failure, and the deployment stage sending a message if the build had successfully deployed or not. The messages were sent using the Telegram http bot API and curl. The lines below show which lines were added to testing to achieve this, with the format being similar for the other stages:
+The fourth and current implementation of the pipeline had the exact same stages as the third(Test, Build, Setup, Deploy). Although added Telegram notifcations on each stage of the build, with the testing stage sending a message if it had passed or failed, the Build and Setup stages only sending messages on failure, and the deployment stage sending a message if the build had successfully deployed or not. The messages were sent using the Telegram http bot API and curl. The lines below show which lines were added to testing to achieve this, with the format being similar for the other stages:
 ```groovy 
   environment {
     TELEGRAM_BOT = credentials('telegram_bot')
@@ -147,9 +151,9 @@ The fourth implementation of the pipeline had the exact same stages as the third
 This is an example of the messages sent by the bot.
 
 ### Benefits of Pipeline
-The multibranch pipeline allowed for benefits during the latter development of the project. As each branch ran the unit testing of the application, this meant that I was given message notifcations when tests had passed. This also allowed GitHub to tell me ,in the pull request screen ,if a branch can be merged based on if it had passed tests.
+The multibranch pipeline allowed for benefits during the latter development of the project. As each branch ran the unit testing of the application, this meant that I was given message notifcations when tests had passed. This also allowed GitHub to tell me if a branch can be merged based on if it had passed tests.
 ![Imgur](https://i.imgur.com/GhwkmGJ.png)
-This would allow me to choose whether to merge pull requests based on successful tests rather than risking the up time of application.
+This would allow me to choose whether to merge pull requests based on successful tests rather than risking the deployment of the application.
 ### Branch views
 The BlueOcean plugin for Jenkins also much improved the user interface for Jenkins, which made it easier to see which stage the pipeline was in. This meant that accessing the logs produced for builds was much easier and it was all in one place.
 ![Imgur](https://i.imgur.com/Y776tZv.png)
