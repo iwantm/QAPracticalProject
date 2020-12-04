@@ -8,6 +8,7 @@ db = SQLAlchemy(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@database:3306/name-db'
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 28700
 
 
 serv2 = "http://service2:5001"
