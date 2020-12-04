@@ -41,6 +41,7 @@ def index():
         db.session.add(new_person)
         db.session.commit()
     except (AttributeError, exc.SQLAlchemyError):
+        db.session.rollback()
         new_person = Names(
             first_name=name["first_name"], last_name=name["last_name"], gender=gender_name)
         db.session.add(new_person)
