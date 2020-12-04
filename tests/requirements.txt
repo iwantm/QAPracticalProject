@@ -5,3 +5,4 @@ pytest-cov
 requests_mock
 flask_sqlalchemy
 pymysql
+pytest-custom_exit_code
